@@ -1,0 +1,40 @@
+FROM tomcat:9-jre8-openjdk
+
+# Installation de metro-standalone
+RUN apt update
+RUN apt install -y ant
+RUN curl https://maven.java.net/content/repositories/releases//org/glassfish/metro/metro-standalone/2.3.1/metro-standalone-2.3.1.zip --output metro-standalone.zip
+RUN unzip metro-standalone.zip
+RUN ant -Dtomcat.home=/usr/local/tomcat/ -f metro/metro-on-tomcat.xml install
+
+# Installation de l'application
+ADD app/nsi-jax-ws.war /usr/local/tomcat/webapps/ROOT.war
+ADD app/nsiws-params /usr/local/tomcat/classpath/nsiws-params
+ADD app/plugins /usr/local/tomcat/classpath/plugins
+RUN echo "# Add classpath to Tomcat CLASSPATH" > /usr/local/tomcat/bin/setenv.sh
+RUN echo "CLASSPATH=/usr/local/tomcat/classpath/" >> /usr/local/tomcat/bin/setenv.sh
+RUN sed -i 's+plugins.path=+plugins.path=/usr/local/tomcat/classpath/plugins/+g' /usr/local/tomcat/classpath/nsiws-params/nsi_plugins.properties
+RUN chmod 750 /usr/local/tomcat/bin/setenv.sh
+
+# Tomcat configuration
+RUN echo 'MODIFICATION DU CONTEXT.XML'
+RUN sed -i '\#^</Context>#i\
+  <ResourceLink name="jdbc/mastore" global="org.estat.sri.MySqlMappingStore" type="javax.sql.DataSource"/> \n \
+  <ResourceLink name="jdbc/authdb" global="org.estat.sri.MySqlAuthDb" type="javax.sql.DataSource"/>' /usr/local/tomcat/conf/context.xml
+ADD app/jdbc-drivers /usr/local/tomcat/lib
+ADD lib/jersey-bundle-1.19.1.jar /usr/local/tomcat/lib
+RUN echo 'MODIFICATION DU SERVER.XML'
+RUN sed -i '\#^  </GlobalNamingResources>#i\
+          <Resource name="org.estat.sri.MySqlMappingStore" auth="Container" \n \
+          type="javax.sql.DataSource" username="mauser" password="mauserpwd" \n \
+          driverClassName="com.mysql.jdbc.Driver" \n \
+          url="jdbc:mysql://10.132.15.230/msdb" \n \
+          maxActive="64" maxIdle="64"/>' /usr/local/tomcat/conf/server.xml     
+RUN sed -i '\#^  </GlobalNamingResources>#i\
+          <Resource name="org.estat.sri.MySqlAuthDb" auth="Container" \n \
+          type="javax.sql.DataSource" username="mauser" password="mauserpwd" \n \
+          driverClassName="com.mysql.jdbc.Driver" \n \
+          url="jdbc:mysql://10.132.15.230/authdb" \n \
+          maxActive="64" maxIdle="64"/>' /usr/local/tomcat/conf/server.xml
+RUN echo 'FIN MODIFICATION DU SERVER.XML'
+RUN cat /usr/local/tomcat/conf/server.xml      

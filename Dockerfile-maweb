@@ -1,0 +1,12 @@
+FROM ubuntu AS build
+RUN curl https://circabc.europa.eu/sd/a/5a995965-b3dd-4173-9161-d1dee6275960/MappingAssistantWebApp_JAVA_v8_2021-10-07.zip --output maweb.zip
+RUN unzip maweb.zip maweb
+
+
+FROM tomcat:9-jre8-openjdk
+COPY --from=build chemin-maweb /usr/local/tomcat/maweb
+ADD maws.war /usr/local/tomcat/webapps/ROOT.war
+ADD classpath /usr/local/tomcat/classpath
+RUN echo "# Add classpath to Tomcat CLASSPATH" > /usr/local/tomcat/bin/setenv.sh
+RUN echo "CLASSPATH=/usr/local/tomcat/classpath/" >> /usr/local/tomcat/bin/setenv.sh
+RUN chmod 750 /usr/local/tomcat/bin/setenv.sh
