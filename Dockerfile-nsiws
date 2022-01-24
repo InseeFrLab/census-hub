@@ -20,14 +20,6 @@ RUN curl https://maven.java.net/content/repositories/releases//org/glassfish/met
 RUN unzip metro-standalone.zip
 RUN ant -Dtomcat.home=/usr/local/tomcat/ -f metro/metro-on-tomcat.xml install
 
-# Variables d'environnement
-ENV URL_AUTHDB=${URL_AUTHDB}
-ENV USERNAME_AUTHDB=${USERNAME_AUTHDB}
-ENV PWD_AUTHDB=${PWD_AUTHDB}
-ENV URL_MSDB=${URL_MSDB}
-ENV USERNAME_MSDB=${USERNAME_MSDB}
-ENV PWD_MSDB=mauserpwd
-
 # Installation de l'application
 
 COPY --from=build nsiws/SRI_Web_Service_Java_v8.0.12-20211208/app/nsi-jax-ws.war /usr/local/tomcat/webapps/ROOT.war
@@ -49,5 +41,3 @@ RUN echo 'MODIFICATION DU SERVER.XML'
 ADD script.sh /usr/local/tomcat/script.sh
 RUN chmod +x /usr/local/tomcat/script.sh
 ENTRYPOINT ["/usr/local/tomcat/script.sh"]
-CMD ["run"]
-RUN echo 'FIN MODIFICATION DU SERVER.XML'  
