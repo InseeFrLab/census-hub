@@ -2,6 +2,25 @@
 
 Images pour les outils de la [suite SDMX-RI](https://ec.europa.eu/eurostat/fr/web/sdmx-infospace/sdmx-it-tools/sdmx-ri) 
 
+## Pré-requis
+
+Pour fonctionner, une instance de mariaDB v10.3 avec 3 bases de données est nécessaire.
+Attention, sous linux il faut utiliser l'option lower_case_table_names=1, car les applicatifs sont sensibles à la casse.
+
+```sql
+CREATE DATABASE authdb;
+CREATE DATABASE msdb;
+CREATE DATABASE census11db;
+CREATE USER mauser IDENTIFIED BY 'mauserpwd';
+GRANT ALL PRIVILEGES ON authdb. * TO 'mauser';
+GRANT ALL PRIVILEGES ON msdb. * TO 'mauser';
+GRANT ALL PRIVILEGES ON census11db. * TO 'mauser';
+```
+
+```docker
+docker run -p3306:3306 -it -v /chemin/vers/volumeBDD:/var/lib/mysql  --env MARIADB_ROOT_PASSWORD=xxxxx  mariadb:10.3 --lower_case_table_names=1
+```
+
 ## Maweb
 
 - Volumes :
