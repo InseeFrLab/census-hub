@@ -1,13 +1,4 @@
 #!/bin/sh
-
-
-echo '\#^  </GlobalNamingResources>#i\
-          <Resource name="org.estat.sri.MySqlMappingStore" auth="Container" \n \
-          type="javax.sql.DataSource" username="'"$DB_MS_USER"'" password="'"$DB_MS_PWD"'" \n \
-          driverClassName="com.mysql.jdbc.Driver" \n \
-          url="jdbc:mysql://'"$DB_ADDRESS"'/'"$DB_MS_NAME"'" \n \
-          maxActive="64" maxIdle="64"/>'
-
 sed -i '\#^  </GlobalNamingResources>#i\
           <Resource name="org.estat.sri.MySqlMappingStore" auth="Container" \n \
           type="javax.sql.DataSource" username="'"$DB_MS_USER"'" password="'"$DB_MS_PWD"'" \n \
