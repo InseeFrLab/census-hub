@@ -17,6 +17,6 @@ COPY --from=build maweb/app/libs/bcprov-jdk15on-1.68.jar /usr/local/tomcat/lib
 RUN echo "# Add classpath to Tomcat CLASSPATH" > /usr/local/tomcat/bin/setenv.sh
 RUN echo "CLASSPATH=/usr/local/tomcat/classpath/" >> /usr/local/tomcat/bin/setenv.sh
 RUN echo "# Add paramter size" >> /usr/local/tomcat/bin/setenv.sh
-RUN echo "JAVA_OPTS=-Dfile.encoding=UTF-8 -Xms6144m -Xmx12000m -XX:PermSize=512m -XX:MaxPermSize=1024m" >> /usr/local/tomcat/bin/setenv.sh
+RUN echo "JAVA_OPTS=-Dfile.encoding=UTF-8 -Xms10g -Xmx10g -XX:PermSize=30g -XX:MaxPermSize=30g" >> /usr/local/tomcat/bin/setenv.sh
 RUN chmod 750 /usr/local/tomcat/bin/setenv.sh
 
