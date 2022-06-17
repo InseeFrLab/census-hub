@@ -11,9 +11,9 @@ FROM tomcat:9-jre8-openjdk
 COPY conf/fake-certificate-cert.pem /usr/local/tomcat/ssl/fake-certificate-cert.pem
 COPY conf/fake-certificate-key.pem /usr/local/tomcat/ssl/fake-certificate-key.pem
 COPY conf/server.xml /usr/local/tomcat/conf/server.xml
-COPY --from=build maweb/app/maws.war /usr/local/tomcat/webapps/ROOT.war
-COPY --from=build maweb/app/classpath /usr/local/tomcat/classpath
-COPY --from=build maweb/app/libs/bcprov-jdk15on-1.68.jar /usr/local/tomcat/lib
+COPY --from=build maweb/MappingAssistantWebApp_JAVA_v8_2022-06-08/app/maws.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build maweb/MappingAssistantWebApp_JAVA_v8_2022-06-08/app/classpath /usr/local/tomcat/classpath
+COPY --from=build maweb/MappingAssistantWebApp_JAVA_v8_2022-06-08/app/libs/bcprov-jdk15on-1.68.jar /usr/local/tomcat/lib
 RUN echo "# Add classpath to Tomcat CLASSPATH" > /usr/local/tomcat/bin/setenv.sh
 RUN echo "CLASSPATH=/usr/local/tomcat/classpath/" >> /usr/local/tomcat/bin/setenv.sh
 RUN echo "# Add paramter size" >> /usr/local/tomcat/bin/setenv.sh
