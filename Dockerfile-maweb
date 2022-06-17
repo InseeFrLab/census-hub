@@ -3,7 +3,7 @@ RUN apt-get update
 RUN apt-get --assume-yes  install curl
 RUN mkdir maweb
 WORKDIR maweb
-RUN curl https://circabc.europa.eu/sd/a/5a995965-b3dd-4173-9161-d1dee6275960/MappingAssistantWebApp_JAVA_v8_2021-10-07.zip --output maweb.zip
+RUN curl https://github.com/InseeFrLab/census-hub/blob/master/MappingAssistantWebApp_JAVA_v8.0.14_2022-06-08.zip --output maweb.zip
 RUN apt-get install unzip
 RUN unzip maweb.zip
 
